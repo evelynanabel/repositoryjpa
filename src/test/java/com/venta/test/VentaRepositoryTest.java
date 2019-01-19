@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import com.venta.dto.Categoria;
 import com.venta.dto.Cliente;
+import com.venta.dto.Factura;
 import com.venta.dto.Producto;
 import com.venta.repositorios.jpa.CategoriaRepositoryJPA;
 import com.venta.repositorios.jpa.ClienteRepositoryJPA;
@@ -62,5 +63,22 @@ public class VentaRepositoryTest extends JPAUnitTest{
 
 		repocli.save(ncli);
 		em.getTransaction().commit();
+		
+		// para la factura
+		Cliente cli = repocli.findOne(1);
+				em.getTransaction().begin();
+				Factura nfat = new Factura(cli, "19-01-2018",1);
+				//(Cliente cliente, String fecha, int nrofactura)
+				repofat.save( nfat);
+				em.getTransaction().commit();
+				
+				// para la detalle
+				Factura fa = repofat.findOne(1);
+				Producto pr = repoprod.findOne(1);
+						em.getTransaction().begin();
+						Detalle ndet = new Detalle(fa, 2.5,10, pr);
+						//Factura factura, double preciounit, int cantidad,  Producto producto_id
+						repodet.save(ndet);
+						em.getTransaction().commit();
 	}
 }
